@@ -1,0 +1,88 @@
+{
+  "name": "Booking",
+  "type": "object",
+  "properties": {
+    "booking_ref": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "equipment_id": {
+      "type": "string"
+    },
+    "equipment_name": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "delivery_address": {
+      "type": "string"
+    },
+    "operator_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "additional_notes": {
+      "type": "string"
+    },
+    "rental_cost": {
+      "type": "number"
+    },
+    "delivery_cost": {
+      "type": "number",
+      "default": 0
+    },
+    "operator_cost": {
+      "type": "number",
+      "default": 0
+    },
+    "subtotal": {
+      "type": "number"
+    },
+    "vat_amount": {
+      "type": "number"
+    },
+    "total_cost": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Approved",
+        "Awaiting Payment",
+        "Paid",
+        "Active Hire",
+        "Completed",
+        "Cancelled"
+      ],
+      "default": "Pending"
+    },
+    "assigned_operator": {
+      "type": "string"
+    },
+    "payment_reference": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "customer_id",
+    "equipment_id",
+    "start_date",
+    "end_date"
+  ]
+}

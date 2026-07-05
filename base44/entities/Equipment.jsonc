@@ -1,0 +1,80 @@
+{
+  "name": "Equipment",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "TLB",
+        "Excavator",
+        "Grader",
+        "Tipper Truck",
+        "Plate Compactor",
+        "Wacker",
+        "Water Pump",
+        "Poker",
+        "Drive Unit",
+        "Grinder",
+        "Drill",
+        "Breaker",
+        "Generator",
+        "Grass Cutting",
+        "Compaction Equipment",
+        "Other"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "specifications": {
+      "type": "string"
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "daily_rate": {
+      "type": "number"
+    },
+    "weekly_rate": {
+      "type": "number"
+    },
+    "monthly_rate": {
+      "type": "number"
+    },
+    "availability_status": {
+      "type": "string",
+      "enum": [
+        "Available",
+        "Hired Out",
+        "Maintenance",
+        "Unavailable"
+      ],
+      "default": "Available"
+    },
+    "operator_available": {
+      "type": "boolean",
+      "default": false
+    },
+    "operator_daily_rate": {
+      "type": "number"
+    },
+    "delivery_rate_per_km": {
+      "type": "number"
+    },
+    "sku": {
+      "type": "string"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "name",
+    "category",
+    "daily_rate"
+  ]
+}

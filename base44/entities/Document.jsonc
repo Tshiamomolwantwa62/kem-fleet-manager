@@ -1,0 +1,41 @@
+{
+  "name": "Document",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Equipment Certificate",
+        "Insurance",
+        "Quotation",
+        "Invoice",
+        "Contract",
+        "Operator Licence",
+        "Other"
+      ]
+    },
+    "file_url": {
+      "type": "string"
+    },
+    "related_entity_id": {
+      "type": "string"
+    },
+    "related_entity_type": {
+      "type": "string"
+    },
+    "expiry_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "file_url"
+  ]
+}

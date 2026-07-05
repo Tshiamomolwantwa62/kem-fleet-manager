@@ -1,0 +1,49 @@
+{
+  "name": "JobApplication",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "position": {
+      "type": "string"
+    },
+    "experience": {
+      "type": "string"
+    },
+    "cv_url": {
+      "type": "string"
+    },
+    "certificates_url": {
+      "type": "string"
+    },
+    "license_url": {
+      "type": "string"
+    },
+    "cover_letter": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Received",
+        "Reviewed",
+        "Shortlisted",
+        "Rejected"
+      ],
+      "default": "Received"
+    }
+  },
+  "required": [
+    "full_name",
+    "email",
+    "phone"
+  ]
+}

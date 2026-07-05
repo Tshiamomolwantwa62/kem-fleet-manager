@@ -1,0 +1,96 @@
+import React, { useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { LayoutDashboard, Package, CalendarCheck, Users, FileText, Wrench, Settings, LogOut, Menu, X, ChevronRight } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+
+const ADMIN_LINKS = [
+  { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
+  { label: "Equipment", path: "/admin/equipment", icon: Package },
+  { label: "Bookings", path: "/admin/bookings", icon: CalendarCheck },
+  { label: "Customers", path: "/admin/customers", icon: Users },
+  { label: "Invoices", path: "/admin/invoices", icon: FileText },
+  { label: "Maintenance", path: "/admin/maintenance", icon: Wrench },
+];
+
+export default function AdminLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  const handleLogout = () => {
+    base44.auth.logout("/");
+  };
+
+  return (
+    <div className="min-h-screen bg-steel-100 flex">
+      {/* Sidebar */}
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-navy-500 transform transition-transform lg:translate-x-0 lg:static lg:inset-auto ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
+        <div className="flex flex-col h-full">
+          {/* Logo */}
+          <div className="p-5 border-b border-navy-400 flex items-center justify-between">
+            <Link to="/admin" className="flex items-center gap-3">
+              <div className="w-9 h-9 bg-gold rounded flex items-center justify-center">
+                <span className="text-navy-500 font-display font-black text-sm">K</span>
+              </div>
+              <div>
+                <div className="font-display font-bold text-white text-sm">KEM ADMIN</div>
+                <div className="text-[9px] text-navy-300 font-mono tracking-widest">MANAGEMENT</div>
+              </div>
+            </Link>
+            <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-navy-300 hover:text-white">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Nav */}
+          <nav className="flex-1 p-4 space-y-1">
+            {ADMIN_LINKS.map(link => (
+              <Link
+                key={link.path}
+                to={link.path}
+                onClick={() => setSidebarOpen(false)}
+                className={`flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium transition-colors ${
+                  location.pathname === link.path
+                    ? "bg-gold text-navy-500"
+                    : "text-navy-200 hover:bg-navy-400 hover:text-white"
+                }`}
+              >
+                <link.icon className="w-4.5 h-4.5" />
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Bottom */}
+          <div className="p-4 border-t border-navy-400 space-y-1">
+            <Link to="/" className="flex items-center gap-3 px-4 py-2.5 text-sm text-navy-200 hover:bg-navy-400 hover:text-white rounded transition-colors">
+              <ChevronRight className="w-4 h-4" /> View Website
+            </Link>
+            <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2.5 text-sm text-navy-200 hover:bg-navy-400 hover:text-white rounded transition-colors w-full">
+              <LogOut className="w-4 h-4" /> Logout
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* Overlay */}
+      {sidebarOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
+      )}
+
+      {/* Main */}
+      <div className="flex-1 flex flex-col min-h-screen">
+        <header className="bg-white border-b border-navy-100 px-4 md:px-6 py-3 flex items-center gap-3 sticky top-0 z-30">
+          <button onClick={() => setSidebarOpen(true)} className="lg:hidden p-2 text-navy-500 hover:bg-navy-50 rounded">
+            <Menu className="w-5 h-5" />
+          </button>
+          <div className="font-mono text-xs text-navy-300 tracking-wider">
+            KEM PLANT & CONSTRUCTION // ADMIN PORTAL
+          </div>
+        </header>
+        <main className="flex-1 p-4 md:p-6 lg:p-8">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}
