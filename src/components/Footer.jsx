@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Clock, ArrowRight } from "lucide-react";
+import { Phone, Mail, MapPin, Clock, ArrowRight, Shield } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 
 export default function Footer() {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    base44.auth.isAuthenticated().then(async (authed) => {
+      if (!authed) return;
+      try {
+        const user = await base44.auth.me();
+        if (user?.role === "admin") setIsAdmin(true);
+      } catch {}
+    });
+  }, []);
+
   return (
     <footer className="bg-navy-500 text-white">
       {/* CTA Band */}
@@ -105,9 +118,14 @@ export default function Footer() {
           <p className="text-xs text-navy-300">
             © {new Date().getFullYear()} KEM Plant & Construction (Pty) Ltd. All rights reserved.
           </p>
-          <div className="flex gap-6 text-xs text-navy-300">
+          <div className="flex gap-6 text-xs text-navy-300 items-center">
             <span className="hover:text-gold cursor-pointer transition-colors">Privacy Policy</span>
             <span className="hover:text-gold cursor-pointer transition-colors">Terms of Service</span>
+            {isAdmin && (
+              <Link to="/admin" className="flex items-center gap-1 hover:text-gold transition-colors">
+                <Shield className="w-3 h-3" /> Admin
+              </Link>
+            )}
           </div>
         </div>
       </div>
