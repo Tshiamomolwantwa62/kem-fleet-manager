@@ -1,0 +1,31 @@
+{
+  "name": "Testimonial",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number",
+      "default": 5
+    },
+    "text": {
+      "type": "string"
+    },
+    "approved": {
+      "type": "boolean",
+      "default": false
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "name",
+    "text"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "name": "Project",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "client_name": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "completion_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "equipment_used": {
+      "type": "string"
+    },
+    "images": {
+      "type": "string"
+    },
+    "video_url": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Construction",
+        "Road Works",
+        "Civil Engineering",
+        "Plant Hire",
+        "Property Maintenance"
+      ],
+      "default": "Construction"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

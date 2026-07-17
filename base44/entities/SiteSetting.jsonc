@@ -1,0 +1,31 @@
+{
+  "name": "SiteSetting",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Homepage",
+        "About",
+        "Contact",
+        "Footer",
+        "SEO",
+        "General"
+      ],
+      "default": "General"
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "key",
+    "value"
+  ]
+}

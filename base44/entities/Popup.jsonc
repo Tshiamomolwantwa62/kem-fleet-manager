@@ -1,0 +1,55 @@
+{
+  "name": "Popup",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "button_text": {
+      "type": "string"
+    },
+    "button_link": {
+      "type": "string"
+    },
+    "background_image": {
+      "type": "string"
+    },
+    "popup_type": {
+      "type": "string",
+      "enum": [
+        "Holiday Special",
+        "Weekend Promotion",
+        "Limited-Time Discount",
+        "New Equipment Arrival",
+        "Important Announcement"
+      ],
+      "default": "Limited-Time Discount"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "show_once": {
+      "type": "boolean",
+      "default": true
+    },
+    "delay_seconds": {
+      "type": "number",
+      "default": 5
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

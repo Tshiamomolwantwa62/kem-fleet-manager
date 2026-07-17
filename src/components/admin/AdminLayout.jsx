@@ -1,15 +1,28 @@
 import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { LayoutDashboard, Package, CalendarCheck, Users, FileText, Wrench, Settings, LogOut, Menu, X, ChevronRight } from "lucide-react";
+import {
+  LayoutDashboard, Package, CalendarCheck, Users, FileText, Wrench,
+  Settings, LogOut, Menu, X, ChevronRight, Image, Briefcase, Star,
+  Newspaper, Mail, Megaphone, GalleryHorizontalEnd, BarChart3, FileEdit
+} from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const ADMIN_LINKS = [
   { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
-  { label: "Equipment", path: "/admin/equipment", icon: Package },
   { label: "Bookings", path: "/admin/bookings", icon: CalendarCheck },
+  { label: "Equipment", path: "/admin/equipment", icon: Package },
   { label: "Customers", path: "/admin/customers", icon: Users },
   { label: "Invoices", path: "/admin/invoices", icon: FileText },
   { label: "Maintenance", path: "/admin/maintenance", icon: Wrench },
+  { label: "Messages", path: "/admin/messages", icon: Mail },
+  { label: "Projects", path: "/admin/projects", icon: Briefcase },
+  { label: "Gallery", path: "/admin/gallery", icon: GalleryHorizontalEnd },
+  { label: "Testimonials", path: "/admin/testimonials", icon: Star },
+  { label: "Blog Posts", path: "/admin/blog", icon: Newspaper },
+  { label: "Banners", path: "/admin/banners", icon: Image },
+  { label: "Popups", path: "/admin/popups", icon: Megaphone },
+  { label: "Content", path: "/admin/content", icon: FileEdit },
+  { label: "Reports", path: "/admin/reports", icon: BarChart3 },
 ];
 
 export default function AdminLayout() {
@@ -23,10 +36,10 @@ export default function AdminLayout() {
   return (
     <div className="min-h-screen bg-steel-100 flex">
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-navy-500 transform transition-transform lg:translate-x-0 lg:static lg:inset-auto ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
-        <div className="flex flex-col h-full">
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-navy-500 transform transition-transform lg:translate-x-0 lg:static lg:inset-auto ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} overflow-y-auto`}>
+        <div className="flex flex-col h-full min-h-screen">
           {/* Logo */}
-          <div className="p-5 border-b border-navy-400 flex items-center justify-between">
+          <div className="p-5 border-b border-navy-400 flex items-center justify-between sticky top-0 bg-navy-500 z-10">
             <Link to="/admin" className="flex items-center gap-3">
               <div className="w-9 h-9 bg-gold rounded flex items-center justify-center">
                 <span className="text-navy-500 font-display font-black text-sm">K</span>
@@ -43,25 +56,28 @@ export default function AdminLayout() {
 
           {/* Nav */}
           <nav className="flex-1 p-4 space-y-1">
-            {ADMIN_LINKS.map(link => (
-              <Link
-                key={link.path}
-                to={link.path}
-                onClick={() => setSidebarOpen(false)}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium transition-colors ${
-                  location.pathname === link.path
-                    ? "bg-gold text-navy-500"
-                    : "text-navy-200 hover:bg-navy-400 hover:text-white"
-                }`}
-              >
-                <link.icon className="w-4.5 h-4.5" />
-                {link.label}
-              </Link>
-            ))}
+            {ADMIN_LINKS.map(link => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={() => setSidebarOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-gold text-navy-500"
+                      : "text-navy-200 hover:bg-navy-400 hover:text-white"
+                  }`}
+                >
+                  <link.icon className="w-4 h-4 shrink-0" />
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Bottom */}
-          <div className="p-4 border-t border-navy-400 space-y-1">
+          <div className="p-4 border-t border-navy-400 space-y-1 sticky bottom-0 bg-navy-500">
             <Link to="/" className="flex items-center gap-3 px-4 py-2.5 text-sm text-navy-200 hover:bg-navy-400 hover:text-white rounded transition-colors">
               <ChevronRight className="w-4 h-4" /> View Website
             </Link>

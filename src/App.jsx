@@ -29,6 +29,15 @@ import AdminBookings from '@/pages/admin/AdminBookings';
 import AdminCustomers from '@/pages/admin/AdminCustomers';
 import AdminInvoices from '@/pages/admin/AdminInvoices';
 import AdminMaintenance from '@/pages/admin/AdminMaintenance';
+import AdminTestimonials from '@/pages/admin/AdminTestimonials';
+import AdminProjects from '@/pages/admin/AdminProjects';
+import AdminGallery from '@/pages/admin/AdminGallery';
+import AdminBlog from '@/pages/admin/AdminBlog';
+import AdminMessages from '@/pages/admin/AdminMessages';
+import AdminContent from '@/pages/admin/AdminContent';
+import AdminPopups from '@/pages/admin/AdminPopups';
+import AdminBanners from '@/pages/admin/AdminBanners';
+import AdminReports from '@/pages/admin/AdminReports';
 
 // Auth pages
 import Login from '@/pages/Login';
@@ -87,6 +96,15 @@ const AuthenticatedApp = () => {
           <Route path="/admin/customers" element={<AdminCustomers />} />
           <Route path="/admin/invoices" element={<AdminInvoices />} />
           <Route path="/admin/maintenance" element={<AdminMaintenance />} />
+          <Route path="/admin/messages" element={<AdminMessages />} />
+          <Route path="/admin/projects" element={<AdminProjects />} />
+          <Route path="/admin/gallery" element={<AdminGallery />} />
+          <Route path="/admin/testimonials" element={<AdminTestimonials />} />
+          <Route path="/admin/blog" element={<AdminBlog />} />
+          <Route path="/admin/banners" element={<AdminBanners />} />
+          <Route path="/admin/popups" element={<AdminPopups />} />
+          <Route path="/admin/content" element={<AdminContent />} />
+          <Route path="/admin/reports" element={<AdminReports />} />
         </Route>
       </Route>
 
