@@ -9,6 +9,15 @@ import SectionHeading from "@/components/SectionHeading";
 
 const CATEGORIES = ["All", "TLB", "Excavator", "Grader", "Tipper Truck", "Plate Compactor", "Wacker", "Water Pump", "Poker", "Drive Unit", "Grinder", "Drill", "Breaker", "Generator", "Grass Cutting", "Compaction Equipment"];
 
+const FILTER_GROUPS = [
+  { label: "All", icon: "🏗️", categories: [] },
+  { label: "Earthworks", icon: "🚜", categories: ["TLB", "Excavator", "Grader", "Tipper Truck"] },
+  { label: "Compaction", icon: "🔨", categories: ["Plate Compactor", "Wacker", "Compaction Equipment"] },
+  { label: "Power Tools", icon: "🔧", categories: ["Grinder", "Drill", "Breaker", "Drive Unit"] },
+  { label: "Pumps & Power", icon: "⚡", categories: ["Water Pump", "Generator", "Poker"] },
+  { label: "Grounds Care", icon: "🌿", categories: ["Grass Cutting"] },
+];
+
 const PLACEHOLDER_IMAGES = {
   TLB: "https://media.base44.com/images/public/6a4a859bde6fdb91ddac1cac/834d70991_generated_6e0b2b96.png",
   Excavator: "https://media.base44.com/images/public/6a4a859bde6fdb91ddac1cac/7a3158956_generated_14c59a06.png",
@@ -23,6 +32,7 @@ export default function Equipment() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  const [groupFilter, setGroupFilter] = useState("All");
   const [view, setView] = useState("grid");
 
   useEffect(() => {
@@ -32,11 +42,17 @@ export default function Equipment() {
       .finally(() => setLoading(false));
   }, []);
 
+  const activeGroup = FILTER_GROUPS.find(g => g.label === groupFilter);
+  const groupCategories = activeGroup?.categories || [];
+
   const filtered = equipment.filter(eq => {
     const matchesSearch = eq.name?.toLowerCase().includes(search.toLowerCase()) || eq.description?.toLowerCase().includes(search.toLowerCase());
     const matchesCat = category === "All" || eq.category === category;
-    return matchesSearch && matchesCat;
+    const matchesGroup = groupFilter === "All" || groupCategories.includes(eq.category);
+    return matchesSearch && matchesCat && matchesGroup;
   });
+
+  const availableCategories = groupFilter === "All" ? CATEGORIES : ["All", ...CATEGORIES.filter(c => c !== "All" && groupCategories.includes(c))];
 
   return (
     <div>
@@ -56,6 +72,22 @@ export default function Equipment() {
       {/* Filters */}
       <section className="bg-white border-b sticky top-16 md:top-20 z-40">
         <div className="max-w-7xl mx-auto px-6 py-4">
+          {/* Group filter pills */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {FILTER_GROUPS.map(g => (
+              <button
+                key={g.label}
+                onClick={() => { setGroupFilter(g.label); setCategory("All"); }}
+                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-heading font-bold transition-colors ${
+                  groupFilter === g.label
+                    ? "bg-navy-500 text-white"
+                    : "bg-steel-100 text-navy-400 hover:bg-navy-50 hover:text-navy-500"
+                }`}
+              >
+                <span>{g.icon}</span> {g.label}
+              </button>
+            ))}
+          </div>
           <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-navy-300" />
@@ -72,7 +104,7 @@ export default function Equipment() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {CATEGORIES.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
+                {availableCategories.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}
               </SelectContent>
             </Select>
             <div className="hidden sm:flex border border-navy-200 rounded-md overflow-hidden">
