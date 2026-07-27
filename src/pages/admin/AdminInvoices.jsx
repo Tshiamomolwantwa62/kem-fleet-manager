@@ -11,6 +11,7 @@ import moment from "moment";
 
 export default function AdminInvoices() {
   const [invoices, setInvoices] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -22,7 +23,16 @@ export default function AdminInvoices() {
     setLoading(true);
     base44.entities.Invoice.list('-created_date', 200).then(setInvoices).finally(() => setLoading(false));
   };
-  useEffect(load, []);
+  useEffect(() => {
+    load();
+    base44.entities.Customer.list('-created_date', 200).then(setCustomers).catch(() => {});
+  }, []);
+
+  const customerLabel = (c) => c.company_name || c.full_name || c.contact_person || c.email;
+  const onCustomerChange = (id) => {
+    const c = customers.find(x => x.id === id);
+    setForm(prev => ({ ...prev, customer_id: id, customer_name: c ? customerLabel(c) : "" }));
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -121,8 +131,19 @@ export default function AdminInvoices() {
               </div>
             </div>
             <div>
-              <label className="font-mono text-xs text-navy-400 tracking-wider uppercase mb-1.5 block">Customer Name</label>
-              <Input value={form.customer_name} onChange={e => setForm({...form, customer_name: e.target.value})} />
+              <label className="font-mono text-xs text-navy-400 tracking-wider uppercase mb-1.5 block">Customer</label>
+              {customers.length === 0 ? (
+                <p className="text-navy-300 text-sm italic">No customers found. Add customers first.</p>
+              ) : (
+                <Select value={form.customer_id} onValueChange={onCustomerChange}>
+                  <SelectTrigger><SelectValue placeholder="Select a customer" /></SelectTrigger>
+                  <SelectContent>
+                    {customers.map(c => (
+                      <SelectItem key={c.id} value={c.id}>{customerLabel(c)}{c.company_name && c.full_name ? ` — ${c.full_name}` : ""}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
             <div>
               <label className="font-mono text-xs text-navy-400 tracking-wider uppercase mb-1.5 block">Items / Description</label>
