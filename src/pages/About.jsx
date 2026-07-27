@@ -34,7 +34,7 @@ export default function About() {
               />
               <div className="mt-8 space-y-5 text-navy-400 leading-relaxed">
                 <p>
-                  KEM Plant & Construction (Pty) Ltd was founded by <strong className="text-navy-500">Mofana Mofana</strong> and <strong className="text-navy-500">Thabani Dlodlo</strong>, two industry professionals with a shared vision of providing reliable, high-quality plant hire and construction services to the Free State and beyond.
+                  KEM Plant & Construction (Pty) Ltd was founded by <strong className="text-navy-500">Mofana Mofana</strong> and <strong className="text-navy-500">Mary-Ann B. Dlodlo</strong>, two industry professionals with a shared vision of providing reliable, high-quality plant hire and construction services to the Free State and beyond.
                 </p>
                 <p>
                   With over <strong className="text-navy-500">15 years of combined experience</strong> in plant hire and logistics, and 5 years in construction services, we've grown from a small operation in Bloemfontein to a trusted partner for construction companies, municipalities, and government departments across South Africa.
@@ -91,7 +91,7 @@ export default function About() {
           <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             {[
               { name: "Mofana Mofana", role: "Co-Founder & Director", phone: "073 737 7462", exp: "15+ years in Plant Hire & Logistics" },
-              { name: "Thabani Dlodlo", role: "Co-Founder & Director", phone: "082 218 1773", exp: "15+ years in Plant Hire & Logistics" },
+              { name: "Mary-Ann B. Dlodlo", role: "Co-Founder & Director", phone: "082 218 1773", exp: "15+ years in Plant Hire & Logistics" },
             ].map((founder, i) => (
               <motion.div
                 key={founder.name}
