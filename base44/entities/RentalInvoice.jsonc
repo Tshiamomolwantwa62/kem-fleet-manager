@@ -31,6 +31,12 @@
     "booking_number": {
       "type": "string"
     },
+    "machine_hour_log_id": {
+      "type": "string"
+    },
+    "machine_hour_log_number": {
+      "type": "string"
+    },
     "items": {
       "type": "string"
     },

@@ -186,6 +186,8 @@ export default function MachineHoursPage() {
         billing_address: customer?.billing_address || "",
         booking_id: l.booking_id || "",
         booking_number: l.booking_number || "",
+        machine_hour_log_id: l.id,
+        machine_hour_log_number: l.log_number,
         items,
         subtotal,
         vat_rate: vatRate,

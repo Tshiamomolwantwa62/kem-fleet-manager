@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Search, Loader2, Edit2, DollarSign, AlertTriangle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -159,6 +160,9 @@ export default function RentalInvoicesPage() {
                   <tr key={inv.id} className={`border-t border-navy-50 hover:bg-steel-50 ${isOverdue ? "bg-red-50" : ""}`}>
                     <td className="px-4 py-3 font-mono text-xs font-bold text-navy-500">
                       {isOverdue && <AlertTriangle className="w-3 h-3 text-red-500 inline mr-1" />}{inv.invoice_number}
+                      {inv.machine_hour_log_number && (
+                        <Link to="/admin/rental/hours" className="block text-[9px] text-gold hover:underline mt-0.5">↳ {inv.machine_hour_log_number}</Link>
+                      )}
                     </td>
                     <td className="px-4 py-3 font-mono text-xs text-navy-400">{inv.invoice_date}</td>
                     <td className="px-4 py-3 font-heading font-bold text-navy-500">{inv.customer_name}</td>
