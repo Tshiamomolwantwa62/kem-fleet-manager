@@ -1,0 +1,123 @@
+{
+  "name": "MachineHourLog",
+  "type": "object",
+  "properties": {
+    "log_number": {
+      "type": "string"
+    },
+    "booking_id": {
+      "type": "string"
+    },
+    "booking_number": {
+      "type": "string"
+    },
+    "equipment_id": {
+      "type": "string"
+    },
+    "equipment_name": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "start_meter_reading": {
+      "type": "number",
+      "description": "Hour meter reading when equipment dispatched"
+    },
+    "end_meter_reading": {
+      "type": "number",
+      "description": "Hour meter reading when equipment returned"
+    },
+    "total_hours": {
+      "type": "number",
+      "description": "Calculated: end - start"
+    },
+    "hourly_rate": {
+      "type": "number"
+    },
+    "minimum_hours": {
+      "type": "number",
+      "default": 0,
+      "description": "Minimum billable hours per rental"
+    },
+    "billable_hours": {
+      "type": "number",
+      "description": "Total hours or minimum, whichever is greater"
+    },
+    "calculated_amount": {
+      "type": "number"
+    },
+    "override_amount": {
+      "type": "number"
+    },
+    "override_reason": {
+      "type": "string"
+    },
+    "final_amount": {
+      "type": "number"
+    },
+    "dispatch_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "return_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "operator_name": {
+      "type": "string"
+    },
+    "site_location": {
+      "type": "string"
+    },
+    "fuel_level_start": {
+      "type": "string",
+      "enum": [
+        "Full",
+        "3/4",
+        "1/2",
+        "1/4",
+        "Empty"
+      ]
+    },
+    "fuel_level_end": {
+      "type": "string",
+      "enum": [
+        "Full",
+        "3/4",
+        "1/2",
+        "1/4",
+        "Empty"
+      ]
+    },
+    "invoice_id": {
+      "type": "string"
+    },
+    "invoice_number": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Dispatched",
+        "On Hire",
+        "Returned",
+        "Invoiced",
+        "Closed"
+      ],
+      "default": "Dispatched"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "equipment_id",
+    "customer_id",
+    "start_meter_reading",
+    "dispatch_date"
+  ]
+}

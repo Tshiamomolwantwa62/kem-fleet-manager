@@ -51,6 +51,7 @@ import RentalInvoicesPage from '@/pages/admin/rental/RentalInvoicesPage';
 import RentalCustomersPage from '@/pages/admin/rental/RentalCustomersPage';
 import PaymentsPage from '@/pages/admin/rental/PaymentsPage';
 import SystemSettingsPage from '@/pages/admin/rental/SystemSettingsPage';
+import MachineHoursPage from '@/pages/admin/rental/MachineHoursPage';
 
 // Auth pages
 import Login from '@/pages/Login';
@@ -131,6 +132,7 @@ const AuthenticatedApp = () => {
           <Route path="/admin/rental/customers" element={<RentalCustomersPage />} />
           <Route path="/admin/rental/payments" element={<PaymentsPage />} />
           <Route path="/admin/settings" element={<SystemSettingsPage />} />
+          <Route path="/admin/rental/hours" element={<MachineHoursPage />} />
         </Route>
       </Route>
 

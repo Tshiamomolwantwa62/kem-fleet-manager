@@ -5,7 +5,7 @@ import {
   Settings, LogOut, Menu, X, ChevronRight, Image, Briefcase, Star,
   Newspaper, Mail, Megaphone, GalleryHorizontalEnd, BarChart3, FileEdit,
   UserCog, CalendarDays, Building2, DollarSign, ClipboardList, ReceiptText,
-  SlidersHorizontal
+  SlidersHorizontal, Gauge
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
@@ -33,6 +33,7 @@ const ADMIN_LINKS = [
   { label: "Equipment", path: "/admin/rental/equipment", icon: Package },
   { label: "Bookings", path: "/admin/rental/bookings", icon: CalendarCheck },
   { label: "Quotations", path: "/admin/rental/quotations", icon: ClipboardList },
+  { label: "Machine Hours", path: "/admin/rental/hours", icon: Gauge },
   { label: "Invoices", path: "/admin/rental/invoices", icon: ReceiptText },
   { label: "Payments", path: "/admin/rental/payments", icon: DollarSign },
   { section: "Administration", label: "System Settings", path: "/admin/settings", icon: SlidersHorizontal },
