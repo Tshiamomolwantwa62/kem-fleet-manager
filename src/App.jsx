@@ -17,6 +17,7 @@ import Equipment from '@/pages/Equipment';
 import Contact from '@/pages/Contact';
 import Blog from '@/pages/Blog';
 import Careers from '@/pages/Careers';
+import Gallery from '@/pages/Gallery';
 
 // Layouts
 import PublicLayout from '@/components/PublicLayout';
@@ -85,6 +86,7 @@ const AuthenticatedApp = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/careers" element={<Careers />} />
+        <Route path="/gallery" element={<Gallery />} />
       </Route>
 
       {/* Admin routes (protected) */}
