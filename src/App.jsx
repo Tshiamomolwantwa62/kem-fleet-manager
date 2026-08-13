@@ -43,6 +43,14 @@ import HRDashboard from '@/pages/admin/HRDashboard';
 import AdminEmployees from '@/pages/admin/AdminEmployees';
 import EmployeeProfile from '@/pages/admin/EmployeeProfile';
 import AdminLeave from '@/pages/admin/AdminLeave';
+import RentalDashboard from '@/pages/admin/rental/RentalDashboard';
+import RentalEquipmentPage from '@/pages/admin/rental/RentalEquipmentPage';
+import RentalBookingsPage from '@/pages/admin/rental/RentalBookingsPage';
+import QuotationsPage from '@/pages/admin/rental/QuotationsPage';
+import RentalInvoicesPage from '@/pages/admin/rental/RentalInvoicesPage';
+import RentalCustomersPage from '@/pages/admin/rental/RentalCustomersPage';
+import PaymentsPage from '@/pages/admin/rental/PaymentsPage';
+import SystemSettingsPage from '@/pages/admin/rental/SystemSettingsPage';
 
 // Auth pages
 import Login from '@/pages/Login';
@@ -115,6 +123,14 @@ const AuthenticatedApp = () => {
           <Route path="/admin/employees" element={<AdminEmployees />} />
           <Route path="/admin/employee/:id" element={<EmployeeProfile />} />
           <Route path="/admin/leave" element={<AdminLeave />} />
+          <Route path="/admin/rental" element={<RentalDashboard />} />
+          <Route path="/admin/rental/equipment" element={<RentalEquipmentPage />} />
+          <Route path="/admin/rental/bookings" element={<RentalBookingsPage />} />
+          <Route path="/admin/rental/quotations" element={<QuotationsPage />} />
+          <Route path="/admin/rental/invoices" element={<RentalInvoicesPage />} />
+          <Route path="/admin/rental/customers" element={<RentalCustomersPage />} />
+          <Route path="/admin/rental/payments" element={<PaymentsPage />} />
+          <Route path="/admin/settings" element={<SystemSettingsPage />} />
         </Route>
       </Route>
 

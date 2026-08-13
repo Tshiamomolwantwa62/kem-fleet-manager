@@ -1,0 +1,80 @@
+{
+  "name": "EquipmentInspection",
+  "type": "object",
+  "properties": {
+    "booking_id": {
+      "type": "string"
+    },
+    "equipment_id": {
+      "type": "string"
+    },
+    "equipment_name": {
+      "type": "string"
+    },
+    "inspection_type": {
+      "type": "string",
+      "enum": [
+        "Pre-Rental",
+        "Post-Rental",
+        "Routine"
+      ],
+      "default": "Pre-Rental"
+    },
+    "inspection_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "inspector": {
+      "type": "string"
+    },
+    "condition": {
+      "type": "string",
+      "enum": [
+        "Excellent",
+        "Good",
+        "Fair",
+        "Poor"
+      ]
+    },
+    "operating_status": {
+      "type": "string",
+      "enum": [
+        "Fully Operational",
+        "Minor Issues",
+        "Major Issues",
+        "Not Operational"
+      ]
+    },
+    "engine_hours": {
+      "type": "number"
+    },
+    "fuel_level": {
+      "type": "string",
+      "enum": [
+        "Full",
+        "3/4",
+        "1/2",
+        "1/4",
+        "Empty"
+      ]
+    },
+    "visible_damage": {
+      "type": "string"
+    },
+    "photos": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "new_damage_found": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "equipment_id",
+    "inspection_type",
+    "inspection_date"
+  ]
+}

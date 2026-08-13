@@ -1,0 +1,102 @@
+{
+  "name": "RentalEquipment",
+  "type": "object",
+  "properties": {
+    "equipment_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "make": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "serial_number": {
+      "type": "string"
+    },
+    "registration_number": {
+      "type": "string"
+    },
+    "year": {
+      "type": "number"
+    },
+    "description": {
+      "type": "string"
+    },
+    "current_location": {
+      "type": "string"
+    },
+    "rental_rate": {
+      "type": "number"
+    },
+    "rate_type": {
+      "type": "string",
+      "enum": [
+        "Per Day",
+        "Per Week",
+        "Per Month",
+        "Per Hour"
+      ],
+      "default": "Per Day"
+    },
+    "fuel_policy": {
+      "type": "string",
+      "enum": [
+        "Customer Provides Fuel",
+        "KEM Provides Fuel",
+        "Fuel Charged Separately",
+        "Dry Rate"
+      ],
+      "default": "Dry Rate"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Available",
+        "Reserved",
+        "On Hire",
+        "Under Maintenance",
+        "Returned",
+        "Damaged",
+        "Out of Service"
+      ],
+      "default": "Available"
+    },
+    "condition": {
+      "type": "string",
+      "enum": [
+        "Excellent",
+        "Good",
+        "Fair",
+        "Poor"
+      ],
+      "default": "Good"
+    },
+    "maintenance_status": {
+      "type": "string",
+      "enum": [
+        "Up to Date",
+        "Due Soon",
+        "Overdue",
+        "In Progress"
+      ],
+      "default": "Up to Date"
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "category"
+  ]
+}

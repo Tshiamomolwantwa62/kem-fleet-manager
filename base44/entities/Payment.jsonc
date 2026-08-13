@@ -1,0 +1,64 @@
+{
+  "name": "Payment",
+  "type": "object",
+  "properties": {
+    "payment_reference": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "invoice_id": {
+      "type": "string"
+    },
+    "invoice_number": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "payment_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "EFT",
+        "Cash",
+        "Credit Card",
+        "Debit Card",
+        "Cheque",
+        "Other"
+      ]
+    },
+    "bank": {
+      "type": "string"
+    },
+    "proof_of_payment_url": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Received",
+        "Partially Received",
+        "Failed",
+        "Refunded"
+      ],
+      "default": "Pending"
+    }
+  },
+  "required": [
+    "customer_id",
+    "invoice_id",
+    "amount"
+  ]
+}

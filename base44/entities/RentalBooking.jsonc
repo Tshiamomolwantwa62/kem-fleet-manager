@@ -1,0 +1,113 @@
+{
+  "name": "RentalBooking",
+  "type": "object",
+  "properties": {
+    "booking_number": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "contact_person": {
+      "type": "string"
+    },
+    "contact_phone": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string"
+    },
+    "equipment_id": {
+      "type": "string"
+    },
+    "equipment_name": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "duration_days": {
+      "type": "number"
+    },
+    "rental_rate": {
+      "type": "number"
+    },
+    "rate_type": {
+      "type": "string",
+      "default": "Per Day"
+    },
+    "fuel_arrangement": {
+      "type": "string"
+    },
+    "delivery_required": {
+      "type": "boolean",
+      "default": false
+    },
+    "delivery_address": {
+      "type": "string"
+    },
+    "delivery_charge": {
+      "type": "number",
+      "default": 0
+    },
+    "site_location": {
+      "type": "string"
+    },
+    "calculated_amount": {
+      "type": "number"
+    },
+    "override_amount": {
+      "type": "number"
+    },
+    "override_reason": {
+      "type": "string"
+    },
+    "final_amount": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Enquiry",
+        "Quotation",
+        "Pending Payment",
+        "Confirmed",
+        "Equipment Dispatched",
+        "On Hire",
+        "Completed",
+        "Cancelled"
+      ],
+      "default": "Enquiry"
+    },
+    "quotation_id": {
+      "type": "string"
+    },
+    "invoice_id": {
+      "type": "string"
+    },
+    "agreement_id": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "customer_id",
+    "equipment_id",
+    "start_date",
+    "end_date"
+  ]
+}

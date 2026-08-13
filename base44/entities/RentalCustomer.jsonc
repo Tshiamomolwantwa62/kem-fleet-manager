@@ -1,0 +1,81 @@
+{
+  "name": "RentalCustomer",
+  "type": "object",
+  "properties": {
+    "customer_id": {
+      "type": "string"
+    },
+    "customer_type": {
+      "type": "string",
+      "enum": [
+        "Company",
+        "Individual"
+      ],
+      "default": "Company"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "registration_number": {
+      "type": "string"
+    },
+    "vat_number": {
+      "type": "string"
+    },
+    "contact_person": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "billing_address": {
+      "type": "string"
+    },
+    "physical_address": {
+      "type": "string"
+    },
+    "postal_address": {
+      "type": "string"
+    },
+    "payment_terms": {
+      "type": "string",
+      "enum": [
+        "Upfront",
+        "7 Days",
+        "14 Days",
+        "30 Days",
+        "60 Days"
+      ],
+      "default": "Upfront"
+    },
+    "credit_status": {
+      "type": "string",
+      "enum": [
+        "Good Standing",
+        "On Hold",
+        "Blacklisted"
+      ],
+      "default": "Good Standing"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Inactive"
+      ],
+      "default": "Active"
+    }
+  },
+  "required": [
+    "customer_type",
+    "contact_person",
+    "phone"
+  ]
+}

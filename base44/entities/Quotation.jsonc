@@ -1,0 +1,107 @@
+{
+  "name": "Quotation",
+  "type": "object",
+  "properties": {
+    "quotation_number": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "customer_address": {
+      "type": "string"
+    },
+    "equipment_id": {
+      "type": "string"
+    },
+    "equipment_name": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "duration_days": {
+      "type": "number"
+    },
+    "unit_rate": {
+      "type": "number"
+    },
+    "rate_type": {
+      "type": "string",
+      "default": "Per Day"
+    },
+    "fuel_charge": {
+      "type": "number",
+      "default": 0
+    },
+    "delivery_charge": {
+      "type": "number",
+      "default": 0
+    },
+    "additional_charges": {
+      "type": "number",
+      "default": 0
+    },
+    "additional_charges_desc": {
+      "type": "string"
+    },
+    "subtotal": {
+      "type": "number"
+    },
+    "vat_rate": {
+      "type": "number",
+      "default": 15
+    },
+    "vat_amount": {
+      "type": "number"
+    },
+    "total": {
+      "type": "number"
+    },
+    "terms": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Sent",
+        "Accepted",
+        "Rejected",
+        "Expired",
+        "Converted"
+      ],
+      "default": "Draft"
+    },
+    "booking_id": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "customer_id",
+    "equipment_id"
+  ]
+}

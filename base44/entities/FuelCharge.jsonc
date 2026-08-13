@@ -1,0 +1,43 @@
+{
+  "name": "FuelCharge",
+  "type": "object",
+  "properties": {
+    "booking_id": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "fuel_type": {
+      "type": "string",
+      "enum": [
+        "Diesel",
+        "Petrol",
+        "Other"
+      ],
+      "default": "Diesel"
+    },
+    "quantity": {
+      "type": "number"
+    },
+    "unit_price": {
+      "type": "number"
+    },
+    "total": {
+      "type": "number"
+    },
+    "charge_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "booking_id",
+    "fuel_type",
+    "quantity",
+    "unit_price"
+  ]
+}

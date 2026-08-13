@@ -1,0 +1,76 @@
+{
+  "name": "DamageIncident",
+  "type": "object",
+  "properties": {
+    "equipment_id": {
+      "type": "string"
+    },
+    "equipment_name": {
+      "type": "string"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "booking_id": {
+      "type": "string"
+    },
+    "agreement_id": {
+      "type": "string"
+    },
+    "incident_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "description": {
+      "type": "string"
+    },
+    "photos": {
+      "type": "string"
+    },
+    "estimated_cost": {
+      "type": "number"
+    },
+    "actual_cost": {
+      "type": "number"
+    },
+    "responsibility": {
+      "type": "string",
+      "enum": [
+        "Customer",
+        "KEM",
+        "Third Party",
+        "Unknown"
+      ]
+    },
+    "resolution": {
+      "type": "string",
+      "enum": [
+        "Repair Equipment",
+        "Replace Equipment",
+        "Charge Customer Market Value",
+        "Other Negotiated Resolution"
+      ]
+    },
+    "resolution_notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "Under Investigation",
+        "Resolved",
+        "Closed"
+      ],
+      "default": "Open"
+    }
+  },
+  "required": [
+    "equipment_id",
+    "incident_date",
+    "description"
+  ]
+}

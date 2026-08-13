@@ -1,0 +1,100 @@
+{
+  "name": "RentalAgreement",
+  "type": "object",
+  "properties": {
+    "agreement_number": {
+      "type": "string"
+    },
+    "agreement_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "customer_id": {
+      "type": "string"
+    },
+    "customer_name": {
+      "type": "string"
+    },
+    "customer_address": {
+      "type": "string"
+    },
+    "equipment_id": {
+      "type": "string"
+    },
+    "equipment_name": {
+      "type": "string"
+    },
+    "booking_id": {
+      "type": "string"
+    },
+    "invoice_id": {
+      "type": "string"
+    },
+    "rental_rate": {
+      "type": "number"
+    },
+    "deposit": {
+      "type": "number",
+      "default": 0
+    },
+    "payment_terms": {
+      "type": "string"
+    },
+    "site_location": {
+      "type": "string"
+    },
+    "special_conditions": {
+      "type": "string"
+    },
+    "terms_and_conditions": {
+      "type": "string"
+    },
+    "lessor_signed_name": {
+      "type": "string"
+    },
+    "lessor_signed_title": {
+      "type": "string"
+    },
+    "lessor_signed_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "lessee_signed_name": {
+      "type": "string"
+    },
+    "lessee_signed_title": {
+      "type": "string"
+    },
+    "lessee_signed_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Pending Signature",
+        "Active",
+        "Expiring Soon",
+        "Expired",
+        "Terminated",
+        "Completed"
+      ],
+      "default": "Draft"
+    }
+  },
+  "required": [
+    "customer_id",
+    "equipment_id",
+    "start_date",
+    "end_date"
+  ]
+}
