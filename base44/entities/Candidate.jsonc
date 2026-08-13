@@ -1,0 +1,56 @@
+{
+  "name": "Candidate",
+  "type": "object",
+  "properties": {
+    "vacancy_id": {
+      "type": "string"
+    },
+    "vacancy_title": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "cv_url": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Applied",
+        "Screening",
+        "Shortlisted",
+        "Interview",
+        "Offer",
+        "Hired",
+        "Rejected"
+      ],
+      "default": "Applied"
+    },
+    "applied_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "interview_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "feedback": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "full_name",
+    "vacancy_id"
+  ]
+}

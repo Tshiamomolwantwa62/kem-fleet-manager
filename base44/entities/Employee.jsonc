@@ -1,0 +1,121 @@
+{
+  "name": "Employee",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "middle_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "date_of_birth": {
+      "type": "string",
+      "format": "date"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "Male",
+        "Female",
+        "Other"
+      ]
+    },
+    "nationality": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "address": {
+      "type": "string"
+    },
+    "photo_url": {
+      "type": "string"
+    },
+    "job_title": {
+      "type": "string"
+    },
+    "department": {
+      "type": "string"
+    },
+    "department_id": {
+      "type": "string"
+    },
+    "employment_type": {
+      "type": "string",
+      "enum": [
+        "Full-time",
+        "Part-time",
+        "Contract",
+        "Casual",
+        "Intern"
+      ],
+      "default": "Full-time"
+    },
+    "employment_status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "On Leave",
+        "Suspended",
+        "Terminated",
+        "Resigned"
+      ],
+      "default": "Active"
+    },
+    "date_joined": {
+      "type": "string",
+      "format": "date"
+    },
+    "contract_start": {
+      "type": "string",
+      "format": "date"
+    },
+    "contract_end": {
+      "type": "string",
+      "format": "date"
+    },
+    "supervisor_id": {
+      "type": "string"
+    },
+    "supervisor_name": {
+      "type": "string"
+    },
+    "work_location": {
+      "type": "string"
+    },
+    "salary": {
+      "type": "number"
+    },
+    "emergency_contact_name": {
+      "type": "string"
+    },
+    "emergency_contact_phone": {
+      "type": "string"
+    },
+    "emergency_contact_relation": {
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "first_name",
+    "last_name",
+    "employment_status"
+  ]
+}

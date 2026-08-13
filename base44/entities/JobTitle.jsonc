@@ -1,0 +1,32 @@
+{
+  "name": "JobTitle",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "department_id": {
+      "type": "string"
+    },
+    "department_name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "grade": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Inactive"
+      ],
+      "default": "Active"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

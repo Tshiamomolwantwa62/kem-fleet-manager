@@ -1,0 +1,35 @@
+{
+  "name": "LeaveType",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "default_days": {
+      "type": "number",
+      "default": 0
+    },
+    "is_paid": {
+      "type": "boolean",
+      "default": true
+    },
+    "carry_forward": {
+      "type": "boolean",
+      "default": false
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Active",
+        "Inactive"
+      ],
+      "default": "Active"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

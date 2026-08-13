@@ -1,0 +1,51 @@
+{
+  "name": "PerformanceReview",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "review_period": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number",
+      "default": 0
+    },
+    "reviewer_id": {
+      "type": "string"
+    },
+    "reviewer_name": {
+      "type": "string"
+    },
+    "review_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "strengths": {
+      "type": "string"
+    },
+    "improvements": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Completed",
+        "Acknowledged"
+      ],
+      "default": "Draft"
+    }
+  },
+  "required": [
+    "employee_id",
+    "review_period"
+  ]
+}

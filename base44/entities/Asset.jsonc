@@ -1,0 +1,64 @@
+{
+  "name": "Asset",
+  "type": "object",
+  "properties": {
+    "asset_id": {
+      "type": "string"
+    },
+    "asset_type": {
+      "type": "string",
+      "enum": [
+        "Laptop",
+        "Desktop",
+        "Mobile Phone",
+        "Tablet",
+        "Vehicle",
+        "Access Card",
+        "Tools",
+        "Equipment",
+        "Other"
+      ]
+    },
+    "description": {
+      "type": "string"
+    },
+    "serial_number": {
+      "type": "string"
+    },
+    "purchase_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Available",
+        "Assigned",
+        "Returned",
+        "Damaged",
+        "Disposed"
+      ],
+      "default": "Available"
+    },
+    "assigned_to": {
+      "type": "string"
+    },
+    "assigned_employee_id": {
+      "type": "string"
+    },
+    "assignment_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "return_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "asset_type"
+  ]
+}

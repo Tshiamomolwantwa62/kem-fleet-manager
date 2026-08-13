@@ -1,0 +1,63 @@
+{
+  "name": "LeaveRequest",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "leave_type": {
+      "type": "string"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "days": {
+      "type": "number",
+      "default": 1
+    },
+    "reason": {
+      "type": "string"
+    },
+    "supporting_doc_url": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "Approved",
+        "Rejected",
+        "Cancelled"
+      ],
+      "default": "Pending"
+    },
+    "submitted_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "approved_by": {
+      "type": "string"
+    },
+    "approval_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "comments": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "employee_id",
+    "leave_type",
+    "start_date",
+    "end_date"
+  ]
+}

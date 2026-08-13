@@ -1,0 +1,40 @@
+{
+  "name": "HRNotification",
+  "type": "object",
+  "properties": {
+    "user_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Leave Request",
+        "Leave Approval",
+        "Timesheet",
+        "Contract Expiry",
+        "Document Expiry",
+        "New Employee",
+        "Announcement",
+        "Other"
+      ],
+      "default": "Other"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false
+    },
+    "link": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "message"
+  ]
+}

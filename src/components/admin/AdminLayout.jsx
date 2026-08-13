@@ -3,12 +3,12 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Package, CalendarCheck, Users, FileText, Wrench,
   Settings, LogOut, Menu, X, ChevronRight, Image, Briefcase, Star,
-  Newspaper, Mail, Megaphone, GalleryHorizontalEnd, BarChart3, FileEdit
+  Newspaper, Mail, Megaphone, GalleryHorizontalEnd, BarChart3, FileEdit, UserCog, CalendarDays
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const ADMIN_LINKS = [
-  { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
+  { section: "Operations", label: "Dashboard", path: "/admin", icon: LayoutDashboard },
   { label: "Bookings", path: "/admin/bookings", icon: CalendarCheck },
   { label: "Equipment", path: "/admin/equipment", icon: Package },
   { label: "Customers", path: "/admin/customers", icon: Users },
@@ -23,6 +23,9 @@ const ADMIN_LINKS = [
   { label: "Popups", path: "/admin/popups", icon: Megaphone },
   { label: "Content", path: "/admin/content", icon: FileEdit },
   { label: "Reports", path: "/admin/reports", icon: BarChart3 },
+  { section: "HR Management", label: "HR Dashboard", path: "/admin/hr", icon: LayoutDashboard },
+  { label: "Employees", path: "/admin/employees", icon: UserCog },
+  { label: "Leave", path: "/admin/leave", icon: CalendarDays },
 ];
 
 export default function AdminLayout() {
@@ -57,21 +60,27 @@ export default function AdminLayout() {
           {/* Nav */}
           <nav className="flex-1 p-4 space-y-1">
             {ADMIN_LINKS.map(link => {
-              const isActive = location.pathname === link.path;
+              const isActive = location.pathname === link.path || (link.path !== "/admin" && location.pathname.startsWith(link.path));
               return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  onClick={() => setSidebarOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-gold text-navy-500"
-                      : "text-navy-200 hover:bg-navy-400 hover:text-white"
-                  }`}
-                >
-                  <link.icon className="w-4 h-4 shrink-0" />
-                  {link.label}
-                </Link>
+                <React.Fragment key={link.path}>
+                  {link.section && (
+                    <div className="pt-4 pb-1 px-4">
+                      <span className="text-[9px] font-mono tracking-widest uppercase text-navy-400">{link.section}</span>
+                    </div>
+                  )}
+                  <Link
+                    to={link.path}
+                    onClick={() => setSidebarOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-2.5 rounded text-sm font-medium transition-colors ${
+                      isActive
+                        ? "bg-gold text-navy-500"
+                        : "text-navy-200 hover:bg-navy-400 hover:text-white"
+                    }`}
+                  >
+                    <link.icon className="w-4 h-4 shrink-0" />
+                    {link.label}
+                  </Link>
+                </React.Fragment>
               );
             })}
           </nav>

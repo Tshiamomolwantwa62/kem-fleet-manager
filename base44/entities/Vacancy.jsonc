@@ -1,0 +1,46 @@
+{
+  "name": "Vacancy",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "department_id": {
+      "type": "string"
+    },
+    "department_name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "requirements": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Open",
+        "On Hold",
+        "Closed",
+        "Filled"
+      ],
+      "default": "Open"
+    },
+    "openings": {
+      "type": "number",
+      "default": 1
+    },
+    "posted_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "closing_date": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "title"
+  ]
+}

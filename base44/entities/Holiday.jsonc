@@ -1,0 +1,24 @@
+{
+  "name": "Holiday",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "is_recurring": {
+      "type": "boolean",
+      "default": false
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "date"
+  ]
+}

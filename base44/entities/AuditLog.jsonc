@@ -1,0 +1,32 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "user": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string"
+    },
+    "module": {
+      "type": "string"
+    },
+    "record_affected": {
+      "type": "string"
+    },
+    "previous_value": {
+      "type": "string"
+    },
+    "new_value": {
+      "type": "string"
+    },
+    "ip_address": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "user",
+    "action",
+    "module"
+  ]
+}

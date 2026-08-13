@@ -1,0 +1,40 @@
+{
+  "name": "Goal",
+  "type": "object",
+  "properties": {
+    "employee_id": {
+      "type": "string"
+    },
+    "employee_name": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "target_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "progress": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "Not Started",
+        "In Progress",
+        "Completed",
+        "On Hold"
+      ],
+      "default": "Not Started"
+    }
+  },
+  "required": [
+    "employee_id",
+    "title"
+  ]
+}

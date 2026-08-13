@@ -39,6 +39,10 @@ import AdminContent from '@/pages/admin/AdminContent';
 import AdminPopups from '@/pages/admin/AdminPopups';
 import AdminBanners from '@/pages/admin/AdminBanners';
 import AdminReports from '@/pages/admin/AdminReports';
+import HRDashboard from '@/pages/admin/HRDashboard';
+import AdminEmployees from '@/pages/admin/AdminEmployees';
+import EmployeeProfile from '@/pages/admin/EmployeeProfile';
+import AdminLeave from '@/pages/admin/AdminLeave';
 
 // Auth pages
 import Login from '@/pages/Login';
@@ -107,6 +111,10 @@ const AuthenticatedApp = () => {
           <Route path="/admin/popups" element={<AdminPopups />} />
           <Route path="/admin/content" element={<AdminContent />} />
           <Route path="/admin/reports" element={<AdminReports />} />
+          <Route path="/admin/hr" element={<HRDashboard />} />
+          <Route path="/admin/employees" element={<AdminEmployees />} />
+          <Route path="/admin/employee/:id" element={<EmployeeProfile />} />
+          <Route path="/admin/leave" element={<AdminLeave />} />
         </Route>
       </Route>
 
