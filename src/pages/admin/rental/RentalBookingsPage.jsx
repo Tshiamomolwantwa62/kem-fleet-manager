@@ -134,6 +134,50 @@ export default function RentalBookingsPage() {
     finally { setSaving(false); }
   };
 
+  const generateInvoice = async (b) => {
+    if (b.invoice_id) {
+      toast({ title: "Invoice already exists", description: b.invoice_number || "This booking is already invoiced." });
+      return;
+    }
+    try {
+      const customer = customers.find(c => c.id === b.customer_id);
+      const rental = calculateRentalCharge({ startDate: b.start_date, endDate: b.end_date, rate: b.rental_rate, rateType: b.rate_type, quantity: b.quantity });
+      const totals = calculateTotals({ rental: rental.rental, fuel: b.fuel_charge, delivery: b.delivery_charge, additional: b.additional_charges, vatRate: b.vat_rate || vatRate });
+      const items = [
+        { description: `${b.equipment_name || "Equipment Rental"} (${b.rate_type || "Per Day"})`, quantity: rental.units, unit_price: Number(b.rental_rate) || 0, total: rental.rental },
+      ];
+      if (Number(b.fuel_charge) > 0) items.push({ description: "Fuel", quantity: 1, unit_price: Number(b.fuel_charge), total: Number(b.fuel_charge) });
+      if (Number(b.delivery_charge) > 0) items.push({ description: "Delivery", quantity: 1, unit_price: Number(b.delivery_charge), total: Number(b.delivery_charge) });
+      if (Number(b.additional_charges) > 0) items.push({ description: b.additional_charges_desc || "Additional Charges", quantity: 1, unit_price: Number(b.additional_charges), total: Number(b.additional_charges) });
+      const invoiceNumber = `INV-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+      const invoice = await base44.entities.RentalInvoice.create({
+        invoice_number: invoiceNumber,
+        invoice_date: new Date().toISOString().slice(0, 10),
+        due_date: new Date().toISOString().slice(0, 10),
+        customer_id: b.customer_id,
+        customer_name: b.customer_name,
+        customer_vat_number: customer?.vat_number || "",
+        billing_address: customer?.billing_address || "",
+        booking_id: b.id,
+        booking_number: b.booking_number,
+        items: JSON.stringify(items),
+        subtotal: totals.subtotal,
+        vat_rate: totals.vatRate,
+        vat_amount: totals.vat,
+        total: totals.total,
+        amount_paid: 0,
+        outstanding: totals.total,
+        status: "Issued",
+        terms: "Payment required upfront. Terms and conditions apply.",
+      });
+      await base44.entities.RentalBooking.update(b.id, { invoice_id: invoice.id, invoice_number: invoiceNumber, subtotal: totals.subtotal, vat_rate: totals.vatRate, vat_amount: totals.vat, total_amount: totals.total, final_amount: totals.total, status: "Pending Payment" });
+      toast({ title: `Invoice ${invoiceNumber} created`, description: `Total R${totals.total.toFixed(2)}` });
+      load();
+    } catch (e) {
+      toast({ title: "Invoice creation failed", description: e.message, variant: "destructive" });
+    }
+  };
+
   const updateStatus = async (b, status) => {
     await base44.entities.RentalBooking.update(b.id, { status });
     if (status === "On Hire" || status === "Equipment Dispatched") {
@@ -205,6 +249,8 @@ export default function RentalBookingsPage() {
                   <td className="px-4 py-3">
                     <div className="flex gap-1">
                       <button onClick={() => openEdit(b)} className="p-1.5 text-navy-300 hover:text-gold"><Edit2 className="w-4 h-4" /></button>
+                      {!b.invoice_id && b.status !== "Cancelled" && <button onClick={() => generateInvoice(b)} className="p-1.5 text-navy-300 hover:text-green-600" title="Create Invoice"><FileText className="w-4 h-4" /></button>}
+                      {b.invoice_id && <span className="text-[9px] font-mono text-green-600 self-center">{b.invoice_number}</span>}
                     </div>
                   </td>
                 </tr>
@@ -238,11 +284,20 @@ export default function RentalBookingsPage() {
               </div>
               <div><Label className="text-xs text-navy-400">Quantity</Label><Input type="number" value={form.quantity} onChange={e => sf("quantity", e.target.value)} className="mt-1" min={1} /></div>
               <div><Label className="text-xs text-navy-400">Rental Rate (R)</Label><Input type="number" value={form.rental_rate} onChange={e => sf("rental_rate", e.target.value)} className="mt-1" /></div>
+              <div><Label className="text-xs text-navy-400">Rate Type</Label>
+                <Select value={form.rate_type || "Per Day"} onValueChange={v => sf("rate_type", v)}>
+                  <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>{["Per Hour", "Per Day", "Per Week", "Per Month"].map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
               <div><Label className="text-xs text-navy-400">Start Date *</Label><Input type="date" value={form.start_date} onChange={e => sf("start_date", e.target.value)} className="mt-1" /></div>
               <div><Label className="text-xs text-navy-400">End Date *</Label><Input type="date" value={form.end_date} onChange={e => sf("end_date", e.target.value)} className="mt-1" /></div>
               <div><Label className="text-xs text-navy-400">Site / Location</Label><Input value={form.site_location} onChange={e => sf("site_location", e.target.value)} className="mt-1" /></div>
               <div><Label className="text-xs text-navy-400">Fuel Arrangement</Label><Input value={form.fuel_arrangement} onChange={e => sf("fuel_arrangement", e.target.value)} className="mt-1" /></div>
               <div><Label className="text-xs text-navy-400">Delivery Charge (R)</Label><Input type="number" value={form.delivery_charge} onChange={e => sf("delivery_charge", e.target.value)} className="mt-1" /></div>
+              <div><Label className="text-xs text-navy-400">Fuel Charge (R)</Label><Input type="number" value={form.fuel_charge} onChange={e => sf("fuel_charge", e.target.value)} className="mt-1" /></div>
+              <div><Label className="text-xs text-navy-400">Additional Charges (R)</Label><Input type="number" value={form.additional_charges} onChange={e => sf("additional_charges", e.target.value)} className="mt-1" /></div>
+              <div><Label className="text-xs text-navy-400">Additional Charges Description</Label><Input value={form.additional_charges_desc} onChange={e => sf("additional_charges_desc", e.target.value)} className="mt-1" /></div>
               <div><Label className="text-xs text-navy-400">Status</Label>
                 <Select value={form.status} onValueChange={v => sf("status", v)}>
                   <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
@@ -252,9 +307,14 @@ export default function RentalBookingsPage() {
             </div>
             {/* Calculated amount display */}
             <div className="bg-steel-50 border border-navy-100 rounded-lg p-4">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-navy-400">Calculated Amount:</span>
-                <span className="font-mono font-bold text-navy-500">R{calcAmount(form).toLocaleString()}</span>
+              <div className="space-y-1 text-sm">
+                <div className="flex justify-between"><span className="text-navy-400">Rental ({calcFinancials(form).units.toFixed(2)} {form.rate_type?.replace("Per ", "")?.toLowerCase() || "units"})</span><span className="font-mono font-bold">R{calcFinancials(form).rental.toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-navy-400">Fuel</span><span className="font-mono">R{Number(form.fuel_charge || 0).toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-navy-400">Delivery</span><span className="font-mono">R{Number(form.delivery_charge || 0).toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-navy-400">Additional</span><span className="font-mono">R{Number(form.additional_charges || 0).toFixed(2)}</span></div>
+                <div className="flex justify-between border-t border-navy-100 pt-1"><span className="text-navy-400">Subtotal</span><span className="font-mono font-bold">R{calcFinancials(form).subtotal.toFixed(2)}</span></div>
+                <div className="flex justify-between"><span className="text-navy-400">VAT ({vatRate}%)</span><span className="font-mono font-bold">R{calcFinancials(form).vat.toFixed(2)}</span></div>
+                <div className="flex justify-between border-t border-navy-100 pt-2"><span className="font-heading font-bold text-navy-500">Total</span><span className="font-mono font-black text-navy-500 text-lg">R{calcFinancials(form).total.toFixed(2)}</span></div>
               </div>
               <div className="grid grid-cols-2 gap-4 mt-3">
                 <div><Label className="text-xs text-navy-400">Override Amount (R)</Label><Input type="number" value={form.override_amount} onChange={e => sf("override_amount", e.target.value)} placeholder="Leave blank to use calculated" className="mt-1" /></div>
