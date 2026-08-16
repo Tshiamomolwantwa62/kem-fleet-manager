@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
+import { calculateTotals, DEFAULT_VAT_RATE } from "@/lib/financial";
 
 const STATUS_COLORS = {
   Dispatched: "bg-blue-100 text-blue-700",
@@ -89,9 +90,9 @@ export default function MachineHoursPage() {
       sf("equipment_id", eid);
       sf("equipment_name", eq.name);
       const rate = Number(eq.rental_rate) || 0;
-      // Convert per-day rate to hourly if needed (assume 8 working hours/day)
-      const hourly = eq.rate_type === "Per Hour" ? rate : eq.rate_type === "Per Day" ? Math.round(rate / 8) : eq.rate_type === "Per Week" ? Math.round(rate / 56) : eq.rate_type === "Per Month" ? Math.round(rate / 240) : rate;
-      sf("hourly_rate", hourly);
+      // Convert the equipment's configured rental rate to an hourly rate without rounding away cents.
+      const hourly = eq.rate_type === "Per Hour" ? rate : eq.rate_type === "Per Day" ? rate / 8 : eq.rate_type === "Per Week" ? rate / 56 : eq.rate_type === "Per Month" ? rate / 240 : rate;
+      sf("hourly_rate", Number(hourly.toFixed(2)));
     } else sf("equipment_id", eid);
   };
 
@@ -167,8 +168,9 @@ export default function MachineHoursPage() {
     try {
       const customer = customers.find(c => c.id === l.customer_id);
       const subtotal = l.final_amount;
-      const vat_amount = subtotal * vatRate / 100;
-      const total = subtotal + vat_amount;
+      const totals = calculateTotals({ rental: subtotal, vatRate: vatRate || DEFAULT_VAT_RATE });
+      const vat_amount = totals.vat;
+      const total = totals.total;
       const invoice_number = `INV-${Date.now().toString(36).toUpperCase().slice(-6)}`;
       const items = JSON.stringify([{
         description: `${l.equipment_name || "Equipment"} — Machine Hours (${l.billable_hours} hrs @ R${l.hourly_rate}/hr)`,
@@ -189,8 +191,8 @@ export default function MachineHoursPage() {
         machine_hour_log_id: l.id,
         machine_hour_log_number: l.log_number,
         items,
-        subtotal,
-        vat_rate: vatRate,
+        subtotal: totals.subtotal,
+        vat_rate: totals.vatRate,
         vat_amount,
         total,
         amount_paid: 0,
