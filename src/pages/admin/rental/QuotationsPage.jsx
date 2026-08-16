@@ -11,6 +11,7 @@ import { useToast } from "@/components/ui/use-toast";
 import DocumentActions from "@/components/admin/rental/DocumentActions";
 import QuickAddCustomer from "@/components/admin/rental/QuickAddCustomer";
 import { buildQuotationHTML } from "@/lib/documentActions";
+import { calculateRentalCharge, calculateTotals, DEFAULT_VAT_RATE } from "@/lib/financial";
 
 const STATUS_COLORS = {
   Draft: "bg-gray-100 text-gray-600",
@@ -58,11 +59,9 @@ export default function QuotationsPage() {
   const sf = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
   const calcTotals = (f) => {
-    const days = Math.max(1, Math.round((new Date(f.end_date) - new Date(f.start_date)) / 86400000) + 1);
-    const rental = (Number(f.unit_rate) || 0) * days * (Number(f.quantity) || 1);
-    const sub = rental + (Number(f.fuel_charge) || 0) + (Number(f.delivery_charge) || 0) + (Number(f.additional_charges) || 0);
-    const vat = sub * vatRate / 100;
-    return { sub: sub.toFixed(2), vat: vat.toFixed(2), total: (sub + vat).toFixed(2), days };
+    const rental = calculateRentalCharge({ startDate: f.start_date, endDate: f.end_date, rate: f.unit_rate, rateType: f.rate_type, quantity: f.quantity });
+    const totals = calculateTotals({ rental: rental.rental, fuel: f.fuel_charge, delivery: f.delivery_charge, additional: f.additional_charges, vatRate: vatRate || DEFAULT_VAT_RATE });
+    return { sub: totals.subtotal.toFixed(2), vat: totals.vat.toFixed(2), total: totals.total.toFixed(2), days: rental.days, units: rental.units };
   };
 
   const totals = calcTotals(form);
@@ -114,8 +113,19 @@ export default function QuotationsPage() {
       equipment_id: q.equipment_id, equipment_name: q.equipment_name,
       quantity: q.quantity, start_date: q.start_date, end_date: q.end_date,
       rental_rate: q.unit_rate, rate_type: q.rate_type, duration_days: q.duration_days,
-      final_amount: q.total, calculated_amount: q.subtotal,
-      quotation_id: q.id, status: "Quotation",
+      fuel_arrangement: q.fuel_charge ? "Charged" : "Included",
+      fuel_charge: Number(q.fuel_charge) || 0,
+      delivery_required: Number(q.delivery_charge) > 0,
+      delivery_charge: Number(q.delivery_charge) || 0,
+      additional_charges: Number(q.additional_charges) || 0,
+      additional_charges_desc: q.additional_charges_desc || "",
+      calculated_amount: Number(q.subtotal) || 0,
+      subtotal: Number(q.subtotal) || 0,
+      vat_rate: Number(q.vat_rate) || vatRate || DEFAULT_VAT_RATE,
+      vat_amount: Number(q.vat_amount) || 0,
+      final_amount: Number(q.total) || 0,
+      total_amount: Number(q.total) || 0,
+      quotation_id: q.id, status: "Pending Payment",
     });
     await base44.entities.Quotation.update(q.id, { status: "Converted", booking_id: booking.id });
     toast({ title: "Converted to booking" });
@@ -207,6 +217,12 @@ export default function QuotationsPage() {
               </div>
               <div><Label className="text-xs text-navy-400">Quantity</Label><Input type="number" value={form.quantity} onChange={e => sf("quantity", e.target.value)} className="mt-1" min={1} /></div>
               <div><Label className="text-xs text-navy-400">Unit Rate (R)</Label><Input type="number" value={form.unit_rate} onChange={e => sf("unit_rate", e.target.value)} className="mt-1" /></div>
+              <div><Label className="text-xs text-navy-400">Rate Type</Label>
+                <Select value={form.rate_type || "Per Day"} onValueChange={v => sf("rate_type", v)}>
+                  <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+                  <SelectContent>{["Per Hour", "Per Day", "Per Week", "Per Month"].map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
               <div><Label className="text-xs text-navy-400">Start Date</Label><Input type="date" value={form.start_date} onChange={e => sf("start_date", e.target.value)} className="mt-1" /></div>
               <div><Label className="text-xs text-navy-400">End Date</Label><Input type="date" value={form.end_date} onChange={e => sf("end_date", e.target.value)} className="mt-1" /></div>
               <div><Label className="text-xs text-navy-400">Fuel Charge (R)</Label><Input type="number" value={form.fuel_charge} onChange={e => sf("fuel_charge", e.target.value)} className="mt-1" /></div>
