@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Loader2, Plus, Eye, Download } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
-import moment from "moment";
 
 export default function AdminInvoices() {
   const [invoices, setInvoices] = useState([]);

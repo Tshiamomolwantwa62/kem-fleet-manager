@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Search, Loader2, Edit2, CheckCircle, XCircle, ArrowRight } from "lucide-react";
+import { Plus, Search, Loader2, Edit2, CheckCircle, ArrowRight } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

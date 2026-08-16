@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Loader2, FileText, Download, DollarSign, Package, Users, CalendarCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
-import moment from "moment";
 
 export default function AdminReports() {
   const [bookings, setBookings] = useState([]);

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import {
-  LayoutDashboard, Package, CalendarCheck, Users, FileText, Wrench,
-  Settings, LogOut, Menu, X, ChevronRight, Image, Briefcase, Star,
+  LayoutDashboard, Package, Wrench, LogOut, Menu, X, ChevronRight, Image, Briefcase, Star,
   Newspaper, Mail, Megaphone, GalleryHorizontalEnd, BarChart3, FileEdit,
   UserCog, CalendarDays, Building2, DollarSign, ClipboardList, ReceiptText,
   SlidersHorizontal, Gauge

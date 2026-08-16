@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, Filter, Grid, List, CheckCircle, User, ArrowRight, Loader2 } from "lucide-react";
+import { Search, Filter, Grid, List, User, ArrowRight, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import SectionHeading from "@/components/SectionHeading";
 
 const CATEGORIES = ["All", "TLB", "Excavator", "Grader", "Tipper Truck", "Plate Compactor", "Wacker", "Water Pump", "Poker", "Drive Unit", "Grinder", "Drill", "Breaker", "Generator", "Grass Cutting", "Compaction Equipment"];
 

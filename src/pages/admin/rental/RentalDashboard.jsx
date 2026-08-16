@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Loader2, Package, Users, FileText, DollarSign, AlertTriangle, TrendingUp, CalendarCheck, Clock, Wrench } from "lucide-react";
+import { Loader2, Package, FileText, DollarSign, AlertTriangle, CalendarCheck, Clock, Wrench } from "lucide-react";
 import { Link } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { base44 } from "@/api/base44Client";

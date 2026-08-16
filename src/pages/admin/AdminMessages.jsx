@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Loader2, Mail, Phone, Trash2, Reply, Eye } from "lucide-react";
+import { Loader2, Phone, Trash2, Reply, Eye } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";

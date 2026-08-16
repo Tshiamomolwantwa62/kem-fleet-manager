@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
-import { empName, fmtDate, STATUS_COLORS, logAudit } from "@/lib/hr";
+import { empName, STATUS_COLORS, logAudit } from "@/lib/hr";
 
 const EMPTY = {
   employee_id: "", first_name: "", middle_name: "", last_name: "", date_of_birth: "",

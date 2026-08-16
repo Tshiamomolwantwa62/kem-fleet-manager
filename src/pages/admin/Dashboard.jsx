@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { DollarSign, CalendarCheck, Package, Users, AlertTriangle, ArrowRight, TrendingUp, Mail, Eye, Clock } from "lucide-react";
+import { DollarSign, CalendarCheck, Package, Users, AlertTriangle, ArrowRight, Mail, Clock } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import moment from "moment";

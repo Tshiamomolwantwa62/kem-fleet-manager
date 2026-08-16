@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Calendar, User, ArrowRight, Loader2 } from "lucide-react";
+import { Calendar, User, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import SectionHeading from "@/components/SectionHeading";
 import moment from "moment";
 
 export default function Blog() {

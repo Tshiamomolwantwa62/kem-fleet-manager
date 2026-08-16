@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Truck, HardHat, Wrench, ArrowRight, CheckCircle } from "lucide-react";
-import SectionHeading from "@/components/SectionHeading";
 
 const PLANT_HIRE_ITEMS = [
   "TLB", "Excavators", "Graders", "Tipper Trucks", "Plate Compactors",

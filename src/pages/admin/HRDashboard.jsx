@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Loader2, Users, UserCheck, UserX, CalendarClock, Plane, TrendingUp, Cake } from "lucide-react";
+import { Loader2, Users, UserCheck, UserX, CalendarClock, Plane, Cake } from "lucide-react";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { base44 } from "@/api/base44Client";
 import { empName, fmtDate, STATUS_COLORS } from "@/lib/hr";
