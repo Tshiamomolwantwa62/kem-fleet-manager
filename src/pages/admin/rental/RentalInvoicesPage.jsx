@@ -12,6 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 import DocumentActions from "@/components/admin/rental/DocumentActions";
 import QuickAddCustomer from "@/components/admin/rental/QuickAddCustomer";
 import { buildInvoiceHTML } from "@/lib/documentActions";
+import { calculateTotals, DEFAULT_VAT_RATE, outstandingAmount } from "@/lib/financial";
 
 const STATUS_COLORS = {
   Draft: "bg-gray-100 text-gray-600",
@@ -70,8 +71,9 @@ export default function RentalInvoicesPage() {
   };
 
   const subtotal = items.reduce((s, i) => s + (Number(i.total) || 0), 0);
-  const vat_amount = subtotal * vatRate / 100;
-  const total = subtotal + vat_amount;
+  const totals = calculateTotals({ rental: subtotal, vatRate: vatRate || DEFAULT_VAT_RATE });
+  const vat_amount = totals.vat;
+  const total = totals.total;
 
   const selectCustomer = (cid) => {
     const c = customers.find(x => x.id === cid);
@@ -107,8 +109,8 @@ export default function RentalInvoicesPage() {
         invoice_number: form.invoice_number || `INV-${Date.now().toString(36).toUpperCase().slice(-6)}`,
         items: JSON.stringify(items),
         subtotal, vat_rate: vatRate, vat_amount, total,
-        amount_paid: form.amount_paid || 0,
-        outstanding: total - (Number(form.amount_paid) || 0),
+        amount_paid: editing ? Number(editing.amount_paid) || 0 : 0,
+        outstanding: outstandingAmount(total, editing ? Number(editing.amount_paid) || 0 : 0),
       };
       editing ? await base44.entities.RentalInvoice.update(editing.id, payload) : await base44.entities.RentalInvoice.create(payload);
       toast({ title: editing ? "Invoice updated" : "Invoice created" });
@@ -118,14 +120,6 @@ export default function RentalInvoicesPage() {
     finally { setSaving(false); }
   };
 
-  const recordPayment = async (inv, amount) => {
-    const paid = (inv.amount_paid || 0) + Number(amount);
-    const outstanding = Math.max(0, inv.total - paid);
-    const status = outstanding <= 0 ? "Paid" : "Partially Paid";
-    await base44.entities.RentalInvoice.update(inv.id, { amount_paid: paid, outstanding, status, payment_date: new Date().toISOString().slice(0, 10) });
-    toast({ title: "Payment recorded" });
-    load();
-  };
 
   const today = new Date().toISOString().slice(0, 10);
   const filtered = invoices
@@ -188,14 +182,7 @@ export default function RentalInvoicesPage() {
                           filename={(d) => d.invoice_number || "invoice"}
                           customerEmail={customers.find(c => c.id === inv.customer_id)?.email}
                         />
-                        {inv.status !== "Paid" && inv.status !== "Cancelled" && (
-                          <button onClick={() => {
-                            const a = window.prompt("Payment amount (R):");
-                            if (a && !isNaN(a)) recordPayment(inv, a);
-                          }} className="p-1.5 text-navy-300 hover:text-green-600" title="Record Payment">
-                            <DollarSign className="w-4 h-4" />
-                          </button>
-                        )}
+                        {inv.status !== "Paid" && inv.status !== "Cancelled" && <Link to="/admin/rental/payments" className="p-1.5 text-navy-300 hover:text-green-600" title="Record Payment"><DollarSign className="w-4 h-4" /></Link>}
                       </div>
                     </td>
                   </tr>
