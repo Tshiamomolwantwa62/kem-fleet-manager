@@ -101,7 +101,7 @@ export default function RentalDashboard() {
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <StatCard icon={DollarSign} label="Total Invoiced" value={`R${totalInvoiced.toLocaleString()}`} color="bg-navy-500" to="/admin/rental/invoices" />
-        <StatCard icon={DollarSign} label="Total Paid" value={`R${totalPaid.toLocaleString()}`} color="bg-green-600" />
+        <StatCard icon={DollarSign} label="Total Paid" value={`R${totalPaid.toLocaleString()}`} sub={`${unreconciledPayments.length} unreconciled payment${unreconciledPayments.length === 1 ? "" : "s"}`} color="bg-green-600" to="/admin/rental/payments" />
         <StatCard icon={DollarSign} label="Outstanding" value={`R${outstanding.toLocaleString()}`} color="bg-amber-600" />
         <StatCard icon={AlertTriangle} label="Overdue Invoices" value={overdue} color="bg-red-600" to="/admin/rental/invoices" />
       </div>
