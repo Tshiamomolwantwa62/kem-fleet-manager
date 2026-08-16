@@ -11,10 +11,7 @@ import { base44 } from "@/api/base44Client";
 
 const ADMIN_LINKS = [
   { section: "Operations", label: "Dashboard", path: "/admin", icon: LayoutDashboard },
-  { label: "Bookings", path: "/admin/bookings", icon: CalendarCheck },
   { label: "Equipment", path: "/admin/equipment", icon: Package },
-  { label: "Customers", path: "/admin/customers", icon: Users },
-  { label: "Invoices", path: "/admin/invoices", icon: FileText },
   { label: "Maintenance", path: "/admin/maintenance", icon: Wrench },
   { label: "Messages", path: "/admin/messages", icon: Mail },
   { label: "Projects", path: "/admin/projects", icon: Briefcase },
