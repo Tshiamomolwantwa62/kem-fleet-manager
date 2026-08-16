@@ -8,6 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
+import DocumentActions from "@/components/admin/rental/DocumentActions";
+import { buildQuotationHTML } from "@/lib/documentActions";
 
 const STATUS_COLORS = {
   Draft: "bg-gray-100 text-gray-600",
@@ -152,6 +154,13 @@ export default function QuotationsPage() {
                   <td className="px-4 py-3">
                     <div className="flex gap-1">
                       <button onClick={() => openEdit(q)} className="p-1.5 text-navy-300 hover:text-gold"><Edit2 className="w-4 h-4" /></button>
+                      <DocumentActions
+                        doc={q}
+                        type="quotation"
+                        buildHTML={buildQuotationHTML}
+                        filename={(d) => d.quotation_number || "quotation"}
+                        customerEmail={customers.find(c => c.id === q.customer_id)?.email}
+                      />
                       {q.status === "Accepted" && (
                         <button onClick={() => convertToBooking(q)} title="Convert to Booking" className="p-1.5 text-navy-300 hover:text-green-600"><ArrowRight className="w-4 h-4" /></button>
                       )}

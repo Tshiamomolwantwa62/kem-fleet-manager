@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
+import DocumentActions from "@/components/admin/rental/DocumentActions";
+import { buildInvoiceHTML } from "@/lib/documentActions";
 
 const STATUS_COLORS = {
   Draft: "bg-gray-100 text-gray-600",
@@ -173,6 +175,13 @@ export default function RentalInvoicesPage() {
                     <td className="px-4 py-3">
                       <div className="flex gap-1">
                         <button onClick={() => openEdit(inv)} className="p-1.5 text-navy-300 hover:text-gold"><Edit2 className="w-4 h-4" /></button>
+                        <DocumentActions
+                          doc={inv}
+                          type="invoice"
+                          buildHTML={buildInvoiceHTML}
+                          filename={(d) => d.invoice_number || "invoice"}
+                          customerEmail={customers.find(c => c.id === inv.customer_id)?.email}
+                        />
                         {inv.status !== "Paid" && inv.status !== "Cancelled" && (
                           <button onClick={() => {
                             const a = window.prompt("Payment amount (R):");
