@@ -52,9 +52,10 @@ export default function RentalDashboard() {
   const activeBookings = bookings.filter(b => ["Confirmed", "Equipment Dispatched", "On Hire"].includes(b.status)).length;
   const pendingQuotes = bookings.filter(b => b.status === "Quotation").length;
 
-  const totalInvoiced = invoices.reduce((s, i) => s + (i.total || 0), 0);
-  const totalPaid = invoices.reduce((s, i) => s + (i.amount_paid || 0), 0);
-  const outstanding = totalInvoiced - totalPaid;
+  const totalInvoiced = invoices.reduce((s, i) => s + (Number(i.total) || 0), 0);
+  const totalPaid = payments.filter(p => !["Failed", "Refunded", "Reversed"].includes(p.status)).reduce((s, p) => s + (Number(p.amount) || 0), 0);
+  const outstanding = invoices.reduce((s, i) => s + Math.max(0, Number(i.outstanding) || 0), 0);
+  const unreconciledPayments = payments.filter(p => p.reconciliation_status !== "Reconciled" && !["Failed", "Refunded", "Reversed"].includes(p.status));
   const overdue = invoices.filter(i => i.status === "Overdue").length;
 
   const today = new Date().toISOString().slice(0, 10);
