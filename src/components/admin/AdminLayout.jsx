@@ -28,7 +28,6 @@ const ADMIN_LINKS = [
   { section: "Equipment Rental", label: "Rental Dashboard", path: "/admin/rental", icon: LayoutDashboard },
   { label: "Customers", path: "/admin/rental/customers", icon: Building2 },
   { label: "Equipment", path: "/admin/rental/equipment", icon: Package },
-  { label: "Bookings", path: "/admin/rental/bookings", icon: CalendarCheck },
   { label: "Quotations", path: "/admin/rental/quotations", icon: ClipboardList },
   { label: "Machine Hours", path: "/admin/rental/hours", icon: Gauge },
   { label: "Invoices", path: "/admin/rental/invoices", icon: ReceiptText },
