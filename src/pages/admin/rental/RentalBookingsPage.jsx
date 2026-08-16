@@ -30,11 +30,6 @@ const EMPTY = {
   override_amount: "", override_reason: "", status: "Enquiry", vat_rate: 15,
 };
 
-function daysBetween(s, e) {
-  if (!s || !e) return 0;
-  return Math.max(0, Math.round((new Date(e) - new Date(s)) / 86400000) + 1);
-}
-
 export default function RentalBookingsPage() {
   const [bookings, setBookings] = useState([]);
   const [customers, setCustomers] = useState([]);
