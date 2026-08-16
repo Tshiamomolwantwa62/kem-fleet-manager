@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
+import { calculateRentalCharge, calculateTotals, DEFAULT_VAT_RATE } from "@/lib/financial";
 
 const STATUS_COLORS = {
   Enquiry: "bg-gray-100 text-gray-600",
@@ -25,8 +26,8 @@ const EMPTY = {
   customer_id: "", customer_name: "", contact_person: "", contact_phone: "", contact_email: "",
   equipment_id: "", equipment_name: "", quantity: 1, start_date: "", end_date: "",
   rental_rate: "", rate_type: "Per Day", fuel_arrangement: "", delivery_required: false,
-  delivery_address: "", delivery_charge: 0, site_location: "", notes: "",
-  override_amount: "", override_reason: "", status: "Enquiry",
+  delivery_address: "", delivery_charge: 0, fuel_charge: 0, additional_charges: 0, additional_charges_desc: "", site_location: "", notes: "",
+  override_amount: "", override_reason: "", status: "Enquiry", vat_rate: 15,
 };
 
 function daysBetween(s, e) {
@@ -38,6 +39,7 @@ export default function RentalBookingsPage() {
   const [bookings, setBookings] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [equipment, setEquipment] = useState([]);
+  const [vatRate, setVatRate] = useState(DEFAULT_VAT_RATE);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
@@ -53,17 +55,17 @@ export default function RentalBookingsPage() {
       base44.entities.RentalBooking.list("-created_date", 500),
       base44.entities.RentalCustomer.filter({ status: "Active" }).catch(() => []),
       base44.entities.RentalEquipment.list().catch(() => []),
-    ]).then(([b, c, e]) => { setBookings(b); setCustomers(c); setEquipment(e); }).finally(() => setLoading(false));
+      base44.entities.SystemSetting.filter({ key: "vat_rate" }).catch(() => []),
+    ]).then(([b, c, e, settings]) => { setBookings(b); setCustomers(c); setEquipment(e); if (settings[0]) setVatRate(Number(settings[0].value) || DEFAULT_VAT_RATE); }).finally(() => setLoading(false));
   };
   useEffect(load, []);
 
   const sf = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
-  const calcAmount = (f) => {
-    const days = daysBetween(f.start_date, f.end_date);
-    const rate = Number(f.rental_rate) || 0;
-    const qty = Number(f.quantity) || 1;
-    return rate * days * qty;
+  const calcFinancials = (f) => {
+    const rental = calculateRentalCharge({ startDate: f.start_date, endDate: f.end_date, rate: f.rental_rate, rateType: f.rate_type, quantity: f.quantity });
+    const totals = calculateTotals({ rental: rental.rental, fuel: f.fuel_charge, delivery: f.delivery_charge, additional: f.additional_charges, vatRate: vatRate || DEFAULT_VAT_RATE });
+    return { ...rental, ...totals };
   };
 
   const openAdd = () => { setEditing(null); setForm({ ...EMPTY }); setFormOpen(true); };
@@ -110,16 +112,18 @@ export default function RentalBookingsPage() {
     }
     setSaving(true);
     try {
-      const days = daysBetween(form.start_date, form.end_date);
-      const calculated = calcAmount(form);
-      const final_amount = form.override_amount ? Number(form.override_amount) : calculated;
+      const financials = calcFinancials(form);
+      const final_amount = form.override_amount ? Number(form.override_amount) : financials.total;
       const payload = {
         ...form,
         booking_number: form.booking_number || `BK-${Date.now().toString(36).toUpperCase().slice(-6)}`,
-        duration_days: days, calculated_amount: calculated, final_amount,
+        duration_days: financials.days, calculated_amount: financials.subtotal, subtotal: financials.subtotal,
+        vat_rate: financials.vatRate, vat_amount: financials.vat, total_amount: final_amount, final_amount,
         quantity: Number(form.quantity) || 1,
         rental_rate: Number(form.rental_rate) || 0,
+        fuel_charge: Number(form.fuel_charge) || 0,
         delivery_charge: Number(form.delivery_charge) || 0,
+        additional_charges: Number(form.additional_charges) || 0,
         override_amount: form.override_amount ? Number(form.override_amount) : undefined,
       };
       editing ? await base44.entities.RentalBooking.update(editing.id, payload) : await base44.entities.RentalBooking.create(payload);
