@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
 import DocumentActions from "@/components/admin/rental/DocumentActions";
+import QuickAddCustomer from "@/components/admin/rental/QuickAddCustomer";
 import { buildQuotationHTML } from "@/lib/documentActions";
 
 const STATUS_COLORS = {
@@ -73,6 +74,11 @@ export default function QuotationsPage() {
     const c = customers.find(x => x.id === cid);
     sf("customer_id", cid);
     if (c) { sf("customer_name", c.company_name || c.contact_person); sf("customer_address", c.billing_address || ""); }
+  };
+
+  const onCustomerCreated = (c) => {
+    setCustomers(prev => [...prev, c]);
+    selectCustomer(c.id);
   };
 
   const selectEquipment = (eid) => {
@@ -185,10 +191,13 @@ export default function QuotationsPage() {
               <div><Label className="text-xs text-navy-400">Quotation Date</Label><Input type="date" value={form.date} onChange={e => sf("date", e.target.value)} className="mt-1" /></div>
               <div><Label className="text-xs text-navy-400">Valid Until</Label><Input type="date" value={form.valid_until} onChange={e => sf("valid_until", e.target.value)} className="mt-1" /></div>
               <div className="col-span-2"><Label className="text-xs text-navy-400">Customer *</Label>
-                <Select value={form.customer_id || "none"} onValueChange={v => selectCustomer(v === "none" ? "" : v)}>
-                  <SelectTrigger className="mt-1"><SelectValue placeholder="Select customer" /></SelectTrigger>
-                  <SelectContent><SelectItem value="none">— Select —</SelectItem>{customers.map(c => <SelectItem key={c.id} value={c.id}>{c.company_name || c.contact_person}</SelectItem>)}</SelectContent>
-                </Select>
+                <div className="flex gap-2 mt-1">
+                  <Select value={form.customer_id || "none"} onValueChange={v => selectCustomer(v === "none" ? "" : v)}>
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="Select customer" /></SelectTrigger>
+                    <SelectContent><SelectItem value="none">— Select —</SelectItem>{customers.map(c => <SelectItem key={c.id} value={c.id}>{c.company_name || c.contact_person}</SelectItem>)}</SelectContent>
+                  </Select>
+                  <QuickAddCustomer onCreated={onCustomerCreated} />
+                </div>
               </div>
               <div className="col-span-2"><Label className="text-xs text-navy-400">Equipment *</Label>
                 <Select value={form.equipment_id || "none"} onValueChange={v => selectEquipment(v === "none" ? "" : v)}>

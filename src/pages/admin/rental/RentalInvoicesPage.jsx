@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
 import DocumentActions from "@/components/admin/rental/DocumentActions";
+import QuickAddCustomer from "@/components/admin/rental/QuickAddCustomer";
 import { buildInvoiceHTML } from "@/lib/documentActions";
 
 const STATUS_COLORS = {
@@ -76,6 +77,11 @@ export default function RentalInvoicesPage() {
     const c = customers.find(x => x.id === cid);
     sf("customer_id", cid);
     if (c) { sf("customer_name", c.company_name || c.contact_person); sf("billing_address", c.billing_address || ""); sf("customer_vat_number", c.vat_number || ""); }
+  };
+
+  const onCustomerCreated = (c) => {
+    setCustomers(prev => [...prev, c]);
+    selectCustomer(c.id);
   };
 
   const openAdd = () => {
@@ -209,10 +215,13 @@ export default function RentalInvoicesPage() {
               <div><Label className="text-xs text-navy-400">Invoice Date</Label><Input type="date" value={form.invoice_date} onChange={e => sf("invoice_date", e.target.value)} className="mt-1" /></div>
               <div><Label className="text-xs text-navy-400">Due Date</Label><Input type="date" value={form.due_date} onChange={e => sf("due_date", e.target.value)} className="mt-1" /></div>
               <div className="col-span-2"><Label className="text-xs text-navy-400">Customer</Label>
-                <Select value={form.customer_id || "none"} onValueChange={v => selectCustomer(v === "none" ? "" : v)}>
-                  <SelectTrigger className="mt-1"><SelectValue placeholder="Select customer" /></SelectTrigger>
-                  <SelectContent><SelectItem value="none">— Select —</SelectItem>{customers.map(c => <SelectItem key={c.id} value={c.id}>{c.company_name || c.contact_person}</SelectItem>)}</SelectContent>
-                </Select>
+                <div className="flex gap-2 mt-1">
+                  <Select value={form.customer_id || "none"} onValueChange={v => selectCustomer(v === "none" ? "" : v)}>
+                    <SelectTrigger className="flex-1"><SelectValue placeholder="Select customer" /></SelectTrigger>
+                    <SelectContent><SelectItem value="none">— Select —</SelectItem>{customers.map(c => <SelectItem key={c.id} value={c.id}>{c.company_name || c.contact_person}</SelectItem>)}</SelectContent>
+                  </Select>
+                  <QuickAddCustomer onCreated={onCustomerCreated} />
+                </div>
               </div>
               <div className="col-span-2"><Label className="text-xs text-navy-400">Billing Address</Label><Input value={form.billing_address} onChange={e => sf("billing_address", e.target.value)} className="mt-1" /></div>
               <div><Label className="text-xs text-navy-400">Customer VAT Number</Label><Input value={form.customer_vat_number} onChange={e => sf("customer_vat_number", e.target.value)} className="mt-1" /></div>
