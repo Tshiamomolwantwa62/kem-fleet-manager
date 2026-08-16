@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Search, Loader2, Edit2, DollarSign, Upload } from "lucide-react";
+import { Plus, Search, Loader2, Edit2, DollarSign, Upload, CheckCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,11 +8,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { base44 } from "@/api/base44Client";
 import { useToast } from "@/components/ui/use-toast";
+import { outstandingAmount } from "@/lib/financial";
 
 const EMPTY = {
   customer_id: "", customer_name: "", invoice_id: "", invoice_number: "",
   amount: "", payment_date: new Date().toISOString().slice(0, 10),
-  payment_method: "EFT", bank: "", payment_reference: "", notes: "", status: "Pending",
+  payment_method: "EFT", bank: "", payment_reference: "", notes: "", status: "Pending", reconciliation_status: "Unreconciled", reconciled_date: "", reconciled_by: "", reconciliation_reference: "",
 };
 
 export default function PaymentsPage() {
@@ -63,22 +64,54 @@ export default function PaymentsPage() {
 
   const save = async () => {
     if (!form.customer_id || !form.invoice_id || !form.amount) { toast({ title: "Customer, invoice and amount required", variant: "destructive" }); return; }
+    const amount = Number(form.amount);
+    if (!Number.isFinite(amount) || amount <= 0) { toast({ title: "Payment amount must be greater than zero", variant: "destructive" }); return; }
+    const inv = invoices.find(i => i.id === form.invoice_id);
+    if (!inv) { toast({ title: "Invoice not found", variant: "destructive" }); return; }
+    if (inv.customer_id !== form.customer_id) { toast({ title: "Customer does not match invoice", variant: "destructive" }); return; }
+    const outstanding = outstandingAmount(inv.total, inv.amount_paid || 0);
+    if (amount > outstanding) {
+      toast({ title: "Overpayment blocked", description: `Maximum allowed for this invoice is R${outstanding.toFixed(2)}.`, variant: "destructive" });
+      return;
+    }
     setSaving(true);
+    let createdPayment = null;
     try {
-      const payload = { ...form, amount: Number(form.amount), status: "Received", payment_reference: form.payment_reference || `PAY-${Date.now().toString(36).toUpperCase().slice(-6)}` };
-      await base44.entities.Payment.create(payload);
-      // Update invoice
-      const inv = invoices.find(i => i.id === form.invoice_id);
-      if (inv) {
-        const paid = (inv.amount_paid || 0) + Number(form.amount);
-        const outstanding = Math.max(0, inv.total - paid);
-        await base44.entities.RentalInvoice.update(form.invoice_id, { amount_paid: paid, outstanding, status: outstanding <= 0 ? "Paid" : "Partially Paid", payment_date: form.payment_date, payment_method: form.payment_method, payment_reference: form.payment_reference });
-      }
-      toast({ title: "Payment recorded" });
+      const payment_reference = form.payment_reference || `PAY-${Date.now().toString(36).toUpperCase().slice(-6)}`;
+      const payload = { ...form, customer_name: inv.customer_name, invoice_number: inv.invoice_number, amount, status: "Received", payment_reference, reconciliation_status: "Unreconciled" };
+      createdPayment = await base44.entities.Payment.create(payload);
+      const paid = (Number(inv.amount_paid) || 0) + amount;
+      const newOutstanding = outstandingAmount(inv.total, paid);
+      await base44.entities.RentalInvoice.update(form.invoice_id, {
+        amount_paid: paid,
+        outstanding: newOutstanding,
+        status: newOutstanding === 0 ? "Paid" : "Partially Paid",
+        payment_date: form.payment_date,
+        payment_method: form.payment_method,
+        payment_reference,
+      });
+      toast({ title: "Payment recorded", description: `R${amount.toFixed(2)} allocated to ${inv.invoice_number}` });
       setFormOpen(false);
       load();
-    } catch (e) { toast({ title: "Save failed", description: e.message, variant: "destructive" }); }
-    finally { setSaving(false); }
+    } catch (e) {
+      if (createdPayment?.id) await base44.entities.Payment.delete(createdPayment.id).catch(() => {});
+      toast({ title: "Payment failed", description: e.message, variant: "destructive" });
+    } finally { setSaving(false); }
+  };
+
+  const reconcilePayment = async (payment) => {
+    if (payment.reconciliation_status === "Reconciled") return;
+    try {
+      const currentUser = await base44.auth.me();
+      await base44.entities.Payment.update(payment.id, {
+        reconciliation_status: "Reconciled",
+        reconciled_date: new Date().toISOString().slice(0, 10),
+        reconciled_by: currentUser?.email || "Admin",
+        reconciliation_reference: payment.payment_reference,
+      });
+      toast({ title: "Payment reconciled", description: payment.payment_reference });
+      load();
+    } catch (e) { toast({ title: "Reconciliation failed", description: e.message, variant: "destructive" }); }
   };
 
   const filtered = payments.filter(p => !search || [p.customer_name, p.invoice_number, p.payment_reference].filter(Boolean).some(v => v.toLowerCase().includes(search.toLowerCase())));
@@ -103,7 +136,7 @@ export default function PaymentsPage() {
       {loading ? <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 text-gold animate-spin" /></div> : (
         <div className="bg-white border border-navy-100 rounded-lg overflow-x-auto">
           <table className="w-full text-sm">
-            <thead><tr className="bg-steel-100">{["Reference", "Date", "Customer", "Invoice", "Amount", "Method", "Status"].map(h => <th key={h} className="px-4 py-3 text-left font-mono text-[10px] text-navy-400 uppercase">{h}</th>)}</tr></thead>
+            <thead><tr className="bg-steel-100">{["Reference", "Date", "Customer", "Invoice", "Amount", "Method", "Status", "Reconciliation", "Actions"].map(h => <th key={h} className="px-4 py-3 text-left font-mono text-[10px] text-navy-400 uppercase">{h}</th>)}</tr></thead>
             <tbody>
               {filtered.map(p => (
                 <tr key={p.id} className="border-t border-navy-50 hover:bg-steel-50">
@@ -114,6 +147,8 @@ export default function PaymentsPage() {
                   <td className="px-4 py-3 font-mono font-bold text-green-600">R{(p.amount || 0).toLocaleString()}</td>
                   <td className="px-4 py-3 text-navy-400">{p.payment_method}</td>
                   <td className="px-4 py-3"><span className="px-2 py-1 text-[10px] font-mono font-bold rounded bg-green-100 text-green-700">{p.status}</span></td>
+                  <td className="px-4 py-3"><span className={`px-2 py-1 text-[10px] font-mono font-bold rounded ${p.reconciliation_status === "Reconciled" ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}>{p.reconciliation_status || "Unreconciled"}</span></td>
+                  <td className="px-4 py-3">{p.reconciliation_status !== "Reconciled" && <button onClick={() => reconcilePayment(p)} className="p-1.5 text-navy-300 hover:text-green-600" title="Reconcile payment"><CheckCircle className="w-4 h-4" /></button>}</td>
                 </tr>
               ))}
             </tbody>
@@ -139,7 +174,9 @@ export default function PaymentsPage() {
               </Select>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <div><Label className="text-xs text-navy-400">Amount (R)</Label><Input type="number" value={form.amount} onChange={e => sf("amount", e.target.value)} className="mt-1" /></div>
+              <div><Label className="text-xs text-navy-400">Amount (R)</Label><Input type="number" min="0.01" step="0.01" value={form.amount} onChange={e => sf("amount", e.target.value)} className="mt-1" />
+                {form.invoice_id && <p className="text-[10px] text-navy-300 mt-1">Outstanding: R{outstandingAmount(invoices.find(i => i.id === form.invoice_id)?.total || 0, invoices.find(i => i.id === form.invoice_id)?.amount_paid || 0).toFixed(2)}</p>}
+              </div>
               <div><Label className="text-xs text-navy-400">Payment Date</Label><Input type="date" value={form.payment_date} onChange={e => sf("payment_date", e.target.value)} className="mt-1" /></div>
               <div><Label className="text-xs text-navy-400">Method</Label><Select value={form.payment_method} onValueChange={v => sf("payment_method", v)}><SelectTrigger className="mt-1"><SelectValue /></SelectTrigger><SelectContent>{["EFT", "Cash", "Credit Card", "Debit Card", "Cheque", "Other"].map(m => <SelectItem key={m} value={m}>{m}</SelectItem>)}</SelectContent></Select></div>
               <div><Label className="text-xs text-navy-400">Bank</Label><Input value={form.bank} onChange={e => sf("bank", e.target.value)} className="mt-1" placeholder="e.g. FNB" /></div>
